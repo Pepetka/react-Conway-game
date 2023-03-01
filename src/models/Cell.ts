@@ -1,23 +1,23 @@
 export class Cell {
-  readonly x: number;
+	readonly x: number;
 
-  readonly y: number;
+	readonly y: number;
 
-  isAlive: boolean;
+	isAlive: boolean;
 
-  id: string;
+	id: string;
 
-  constructor(
-    x: number,
-    y: number,
-  ) {
-    this.x = x;
-    this.y = y;
-    this.isAlive = false;
-    this.id = String(x) + String(y);
-  }
+	constructor(
+		x: number,
+		y: number,
+	) {
+		this.x = x;
+		this.y = y;
+		this.isAlive = false;
+		this.id = String(x) + String(y);
+	}
 
-  public setAlive(isAlive: boolean) {
-    this.isAlive = isAlive;
-  }
+	public setAlive(isAlive: boolean) {
+		this.isAlive = isAlive;
+	}
 }

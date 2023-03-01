@@ -1,111 +1,131 @@
 import {Cell} from "./Cell";
 
 export class Board {
-  cells: Array<Array<Cell>> = [];
+	cells: Array<Array<Cell>> = [];
 
-  staticNextGen = false;
+	staticNextGen = false;
 
-  public initCells() {
-    for (let i = 0; i < 64; i++) {
-      const row: Array<Cell> = [];
+	boardWidth: number;
 
-      for (let j = 0; j < 64; j++) {
-        row.push(new Cell(
-          j,
-          i,
-        ));
-      }
+	boardHeight: number;
 
-      this.cells.push(row);
-    }
-  }
+	constructor(width = 64, height = 64) {
+		this.boardWidth = width;
+		this.boardHeight = height;
+	}
 
-  public getCopyBoard() {
-    const newBoard = new Board();
-    newBoard.cells = this.cells;
-    newBoard.staticNextGen = this.staticNextGen;
+	public initCells() {
+		for (let i = 0; i < this.boardHeight; i++) {
+			const row: Array<Cell> = [];
 
-    return newBoard;
-  }
+			for (let j = 0; j < this.boardWidth; j++) {
+				row.push(new Cell(
+					j,
+					i,
+				));
+			}
 
-  public getNextGeneration() {
-    const newBoard = new Board();
+			this.cells.push(row);
+		}
+	}
 
-    newBoard.initCells();
+	public getCopyBoard() {
+		const newBoard = new Board(this.boardWidth, this.boardHeight);
+		newBoard.cells = this.cells;
+		newBoard.staticNextGen = this.staticNextGen;
+		newBoard.boardWidth = this.boardWidth;
+		newBoard.boardHeight = this.boardHeight;
 
-    for (let i = 0; i < this.cells.length; i++) {
-      const row = this.cells[i];
+		return newBoard;
+	}
 
-      for (let j = 0; j < row.length; j++) {
-        const cell = row[j];
-        const aliveNeighbours: Array<Cell> = [];
-        let aliveNeighboursNum = 0;
+	public setNextGeneration() {
+		const newBoard = new Board(this.boardWidth, this.boardHeight);
 
-        if (i !== 0) {
-          aliveNeighbours.push(this.cells[i-1][j]);
-        }
+		newBoard.initCells();
 
-        if (i !== 0 && j !== 0) {
-          aliveNeighbours.push(this.cells[i-1][j-1]);
-        }
+		for (let i = 0; i < this.cells.length; i++) {
+			const row = this.cells[i];
 
-        if (j !== 0) {
-          aliveNeighbours.push(this.cells[i][j-1]);
-        }
+			for (let j = 0; j < row.length; j++) {
+				const cell = row[j];
+				const aliveNeighbours: Array<Cell> = [];
+				let aliveNeighboursNum = 0;
 
-        if (i !== this.cells.length - 1) {
-          aliveNeighbours.push(this.cells[i+1][j]);
-        }
+				if (i !== 0) {
+					aliveNeighbours.push(this.cells[i - 1][j]);
+				}
 
-        if (i !== this.cells.length - 1 && j !== row.length - 1) {
-          aliveNeighbours.push(this.cells[i+1][j+1]);
-        }
+				if (i !== 0 && j !== 0) {
+					aliveNeighbours.push(this.cells[i - 1][j - 1]);
+				}
 
-        if (j !== row.length - 1) {
-          aliveNeighbours.push(this.cells[i][j+1]);
-        }
+				if (j !== 0) {
+					aliveNeighbours.push(this.cells[i][j - 1]);
+				}
 
-        if (i !== 0 && j !== row.length - 1) {
-          aliveNeighbours.push(this.cells[i-1][j+1]);
-        }
+				if (i !== this.cells.length - 1) {
+					aliveNeighbours.push(this.cells[i + 1][j]);
+				}
 
-        if (i !== this.cells.length - 1 && j !== 0) {
-          aliveNeighbours.push(this.cells[i+1][j-1]);
-        }
+				if (i !== this.cells.length - 1 && j !== row.length - 1) {
+					aliveNeighbours.push(this.cells[i + 1][j + 1]);
+				}
 
-        for (const aliveNeighbour of aliveNeighbours) {
-          if (aliveNeighbour.isAlive) {
-            aliveNeighboursNum++;
-          }
-        }
+				if (j !== row.length - 1) {
+					aliveNeighbours.push(this.cells[i][j + 1]);
+				}
 
-        if (!cell.isAlive && aliveNeighboursNum === 3) {
-          newBoard.cells[i][j].setAlive(true);
-        }
+				if (i !== 0 && j !== row.length - 1) {
+					aliveNeighbours.push(this.cells[i - 1][j + 1]);
+				}
 
-        if (cell.isAlive && (aliveNeighboursNum === 2 || aliveNeighboursNum === 3)) {
-          newBoard.cells[i][j].setAlive(true);
-        }
-      }
-    }
+				if (i !== this.cells.length - 1 && j !== 0) {
+					aliveNeighbours.push(this.cells[i + 1][j - 1]);
+				}
 
-    if (JSON.stringify(newBoard.cells) === JSON.stringify(this.cells)) {
-      this.staticNextGen = true;
-      newBoard.staticNextGen = true;
-    }
+				for (const aliveNeighbour of aliveNeighbours) {
+					if (aliveNeighbour.isAlive) {
+						aliveNeighboursNum++;
+					}
+				}
 
-    for (let i = 0; i < this.cells.length; i++) {
-      const row = this.cells[i];
-      const newRow = newBoard.cells[i];
+				if (!cell.isAlive && aliveNeighboursNum === 3) {
+					newBoard.cells[i][j].setAlive(true);
+				}
 
-      for (let j = 0; j < row.length; j++) {
-        const cell = row[j];
-        const newCell = newRow[j];
+				if (cell.isAlive && (aliveNeighboursNum === 2 || aliveNeighboursNum === 3)) {
+					newBoard.cells[i][j].setAlive(true);
+				}
+			}
+		}
 
-        cell.setAlive(newCell.isAlive);
-      }
-    }
+		if (JSON.stringify(newBoard.cells) === JSON.stringify(this.cells)) {
+			this.staticNextGen = true;
+		}
 
-    return newBoard;
-  }
+		for (let i = 0; i < this.cells.length; i++) {
+			const row = this.cells[i];
+			const newRow = newBoard.cells[i];
+
+			for (let j = 0; j < row.length; j++) {
+				const cell = row[j];
+				const newCell = newRow[j];
+
+				cell.setAlive(newCell.isAlive);
+			}
+		}
+	}
+
+	public setRandomFirstGen() {
+		for (let i = 0; i < this.cells.length; i++) {
+			const row = this.cells[i];
+
+			for (let j = 0; j < row.length; j++) {
+				const cell = row[j];
+
+				cell.setAlive(Math.random() > 0.5);
+			}
+		}
+	}
 }

@@ -7,11 +7,11 @@ interface ICellComponentProps {
 }
 
 export const CellComponent = memo((props: ICellComponentProps) => {
-  const {cell, onClick} = props;
+	const {cell, onClick} = props;
 
-  const onClickHandle = () => onClick(cell);
+	const onClickHandle = () => onClick(cell);
 
-  return (
-    <div onClick={onClickHandle} className={`Cell ${cell.isAlive ? "alive" : "dead"}`} />
-  );
+	return (
+		<div onClick={onClickHandle} className={`Cell ${cell.isAlive ? "alive" : "dead"}`} />
+	);
 });

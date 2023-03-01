@@ -13,7 +13,12 @@
 .btnGroup {
   display: flex;
   justify-content: space-between;
-  width: 640px;
+  width: 800px;
+}
+
+.controlGroup {
+  display: flex;
+  gap: 10px;
 }
 
 .button {
@@ -33,22 +38,28 @@
   transition: transform 0.1s linear;
 }
 
+.button.active {
+  background: black;
+  color: white;
+}
+
 .Board {
   display: flex;
-  width: 640px;
   flex-wrap: wrap;
+  border: 2px solid black;
+  box-sizing: content-box;
 }
 
 .Cell {
   width: 10px;
   height: 10px;
-  border: 1px solid black;
+  border: 1px solid gray;
 }
 
 .alive {
-  background: yellow;
+  background: black;
 }
 
 .dead {
-  background: gray;
+  background: white;
 }
